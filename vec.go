@@ -9,10 +9,6 @@ type Vector struct {
 	x, y, z float64
 }
 
-func (u Vector) getX() float64 {
-	return u.x
-}
-
 // Point3 blah
 type Point3 = Vector
 
@@ -23,8 +19,16 @@ func color(x float64, y float64, z float64) Color {
 	return Color{x: x, y: y, z: z}
 }
 
+func point3(x float64, y float64, z float64) Point3 {
+	return Point3{x: x, y: y, z: z}
+}
+
+func vec3(x float64, y float64, z float64) Vector {
+	return Vector{x: x, y: y, z: z}
+}
+
 func (u Vector) length() float64 {
-	return math.Sqrt(u.length())
+	return math.Sqrt(u.lengthSquared())
 }
 
 func (u Vector) lengthSquared() float64 {
@@ -52,7 +56,7 @@ func (u Vector) scale(t float64) Vector {
 }
 
 func (u Vector) divide(t float64) Vector {
-	return u.scale(t)
+	return u.scale(1 / t)
 }
 
 func (u Vector) dot(v Vector) float64 {
