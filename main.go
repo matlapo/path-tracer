@@ -34,14 +34,8 @@ func main() {
 			g := float64(j) / float64(imageHeight-1)
 			b := 0.25
 
-			var ir int = int(255.999 * float64(r))
-			var ig int = int(255.999 * float64(g))
-			var ib int = int(255.999 * float64(b))
-
-			d1 := []byte(strconv.Itoa(ir) + " " + strconv.Itoa(ig) + " " + strconv.Itoa(ib) + "\n")
-
-			_, err := w.Write(d1)
-			check(err)
+			var pixelColor Color = color(r, g, b)
+			writeColor(w, pixelColor)
 		}
 	}
 
