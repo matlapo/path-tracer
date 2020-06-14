@@ -7,12 +7,31 @@ import (
 	"strconv"
 )
 
+// some terminology:
+// basic idea: trace a path from imaginary eye (the camera)
+// through each pixel of the screen and calculating the color for each pixel.
+
+// behind the screen is a scene, which is a mathematical representation of
+// a 3D environment.
+
+// (1) calculate the ray from the eye to the pixel
+// (2) determine which objects the ray intersects
+// (3) compute a color for that intersection point.
+
+// the camera is located at (0,0,0), the screen is towards the negative
+// z-axis.
+
+// what's a viewport? basically the screen
+// focal length = 1 unit (check the z-axis on the diagram)
+
 func check(e error) {
 	if e != nil {
 		panic(e)
 	}
 }
 
+// returns the color of the background
+// blendValue = (1 - t)*startValue + t*endValue (0 <= t <= 1)
 func rayColor(ray Ray) Color {
 	var unitDirection Vector = ray.direction.unit()
 	t := 0.5 * (unitDirection.y + 1.0)
