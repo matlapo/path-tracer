@@ -33,9 +33,21 @@ func check(e error) {
 // returns the color of the background
 // blendValue = (1 - t)*startValue + t*endValue (0 <= t <= 1)
 func rayColor(ray Ray) Color {
+	if hitSphere(point3(0, 0, -1), 0.5, ray) {
+		return color(1, 0, 0)
+	}
 	var unitDirection Vector = ray.direction.unit()
 	t := 0.5 * (unitDirection.y + 1.0)
 	return (color(1.0, 1.0, 1.0).scale(1.0 - t)).plus(color(0.5, 0.7, 1.0).scale(t))
+}
+
+func hitSphere(center Point3, radius float64, ray Ray) bool {
+	var oc Vector = ray.origin.minus(center)
+	var a = ray.direction.dot(ray.direction)
+	var b = 2.0 * oc.dot(ray.direction)
+	var c = oc.dot(oc) - radius*radius
+	var discrimnant = b*b - 4*a*c
+	return (discrimnant > 0)
 }
 
 func main() {
