@@ -44,18 +44,6 @@ func rayColor(ray Ray) Color {
 	return (color(1.0, 1.0, 1.0).scale(1.0 - t)).plus(color(0.5, 0.7, 1.0).scale(t))
 }
 
-// vec3 oc = r.origin() - center;
-// auto a = r.direction().length_squared();
-// auto half_b = dot(oc, r.direction());
-// auto c = oc.length_squared() - radius*radius;
-// auto discriminant = half_b*half_b - a*c;
-
-// if (discriminant < 0) {
-//     return -1.0;
-// } else {
-//     return (-half_b - sqrt(discriminant) ) / a;
-// }
-
 func hitSphere(center Point3, radius float64, ray Ray) float64 {
 	var oc Vector = ray.origin.minus(center)
 	var a = ray.direction.lengthSquared()
@@ -64,9 +52,8 @@ func hitSphere(center Point3, radius float64, ray Ray) float64 {
 	var discrimnant = halfB*halfB - a*c
 	if discrimnant < 0 {
 		return -1.0
-	} else {
-		return (-halfB - math.Sqrt(discrimnant)) / a
 	}
+	return (-halfB - math.Sqrt(discrimnant)) / a
 }
 
 func main() {
