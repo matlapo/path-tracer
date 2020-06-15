@@ -24,14 +24,16 @@ func (sphere Sphere) hit(ray Ray, tMin float64, tMax float64, rec HitRecord) boo
 		if temp < tMax && temp > tMin {
 			rec.t = temp
 			rec.p = ray.at(rec.t)
-			rec.normal = (rec.p.minus(sphere.center)).divide(sphere.radius)
+			var outwardNormal = (rec.p.minus(sphere.center)).divide(sphere.radius)
+			rec.setFaceNormal(ray, outwardNormal)
 			return true
 		}
 		temp = (-halfB + root) / a
 		if temp < tMax && temp > tMin {
 			rec.t = temp
 			rec.p = ray.at(rec.t)
-			rec.normal = (rec.p.minus(sphere.center)).divide(sphere.radius)
+			var outwardNormal = (rec.p.minus(sphere.center)).divide(sphere.radius)
+			rec.setFaceNormal(ray, outwardNormal)
 			return true
 		}
 	}
