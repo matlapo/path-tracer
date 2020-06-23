@@ -39,7 +39,11 @@ func rayColor(ray Ray) Color {
 		var N Vector = (ray.at(t)).minus(vec3(0, 0, -1))
 		return color(N.x+1, N.y+1, N.z+1).scale(0.5)
 	}
+	// else, ray hits the background.
 	var unitDirection Vector = ray.direction.unit()
+	// by converting ray.direction to a unit vector, we can have
+	// a blend based on the value of y (which we know is now -1 < y < 1)
+	// and the 1/2 factor keeps 0 <= t <= 1 required for the lerp.
 	t = 0.5 * (unitDirection.y + 1.0)
 	return (color(1.0, 1.0, 1.0).scale(1.0 - t)).plus(color(0.5, 0.7, 1.0).scale(t))
 }
@@ -72,20 +76,32 @@ func main() {
 	check(err)
 	fmt.Printf("wrote header: %d bytes\n", n4)
 
+	// viewport conserves same aspect ratio, but has different units
 	const viewportHeight = 2.0
 	const viewportWidth = aspectRatio * viewportHeight
+
+	// the eye is 1.0 units away from the viewport
 	const focalLength = 1.0
 
 	var origin = point3(0, 0, 0)
 	var horizontal = vec3(viewportWidth, 0, 0)
 	var vertical = vec3(0, viewportHeight, 0)
+
+	// origin - horizontal/2 - vertical/2 - focal_length == lower left corner of viewport
+	// see 3D diagram.
 	var lowerLeftCorner = ((origin.minus(horizontal.scale(0.5))).minus(vertical.scale(0.5))).minus(vec3(0, 0, focalLength))
+
+	fmt.Printf("DEBUG %f %f %f\n", lowerLeftCorner.x, lowerLeftCorner.y, lowerLeftCorner.z)
 
 	for j := imageHeight - 1; j >= 0; j-- {
 		for i := 0; i < imageWidth; i++ {
+			// 0 <= u,v <= 1
 			var u = float64(i) / float64(imageWidth-1)
 			var v = float64(j) / float64(imageHeight-1)
+			// lower_left_corner + u*horizontal + v*vertical - origin
+			// u,v = fraction of viewport => u*horizontal = current point on viewport
 			var dir Vector = ((lowerLeftCorner.plus(horizontal.scale(u))).plus(vertical.scale(v))).minus(origin)
+			// vector from camera's eye to the viewport
 			var ray Ray = ray(origin, dir)
 			var pixelColor = rayColor(ray)
 
