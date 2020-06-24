@@ -22,5 +22,5 @@ func (rec *HitRecord) setFaceNormal(ray Ray, outwardNormal Vector) {
 
 // Hittable takes a ray as input. Most ray tracers have a valid interval for hits.
 type hittable interface {
-	hit(ray Ray, tMin float64, tMax float64, rec HitRecord) bool
+	hit(ray Ray, tMin float64, tMax float64, rec *HitRecord) bool
 }

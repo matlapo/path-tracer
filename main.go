@@ -35,7 +35,7 @@ func check(e error) {
 // blendValue = (1 - t)*startValue + t*endValue (0 <= t <= 1)
 func rayColor(ray Ray, world hittable) Color {
 	var hitRecord HitRecord
-	if world.hit(ray, 0, infinity, hitRecord) {
+	if world.hit(ray, 0, infinity, &hitRecord) {
 		return (hitRecord.normal.plus(color(1, 1, 1))).scale(0.5)
 	}
 	// else, ray hits the background.
