@@ -36,7 +36,7 @@ func check(e error) {
 func rayColor(ray Ray) Color {
 	var t = hitSphere(point3(0, 0, -1), 0.5, ray)
 	if t > 0.0 {
-		var N Vector = (ray.at(t)).minus(vec3(0, 0, -1))
+		var N Vector = ((ray.at(t)).minus(vec3(0, 0, -1))).unit()
 		return color(N.x+1, N.y+1, N.z+1).scale(0.5)
 	}
 	// else, ray hits the background.
@@ -49,6 +49,9 @@ func rayColor(ray Ray) Color {
 }
 
 func hitSphere(center Point3, radius float64, ray Ray) float64 {
+	// [P(t) - C]^2 = R^2 where P(t) = A + t*B
+	// This gives a polynomial of order 2 (t is the unknown).
+	// t here is a value that stretches the ray to any length.
 	var oc Vector = ray.origin.minus(center)
 	var a = ray.direction.lengthSquared()
 	var halfB = oc.dot(ray.direction)
