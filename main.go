@@ -33,18 +33,17 @@ func check(e error) {
 
 // returns the color of the background
 // blendValue = (1 - t)*startValue + t*endValue (0 <= t <= 1)
-func rayColor(ray Ray) Color {
-	var t = hitSphere(point3(0, 0, -1), 0.5, ray)
-	if t > 0.0 {
-		var N Vector = ((ray.at(t)).minus(vec3(0, 0, -1))).unit()
-		return color(N.x+1, N.y+1, N.z+1).scale(0.5)
+func rayColor(ray Ray, world hittable) Color {
+	var hitRecord HitRecord
+	if world.hit(ray, 0, infinity, hitRecord) {
+		return (hitRecord.normal.plus(color(1, 1, 1))).scale(0.5)
 	}
 	// else, ray hits the background.
 	var unitDirection Vector = ray.direction.unit()
 	// by converting ray.direction to a unit vector, we can have
 	// a blend based on the value of y (which we know is now -1 < y < 1)
 	// and the 1/2 factor keeps 0 <= t <= 1 required for the lerp.
-	t = 0.5 * (unitDirection.y + 1.0)
+	var t = 0.5 * (unitDirection.y + 1.0)
 	return (color(1.0, 1.0, 1.0).scale(1.0 - t)).plus(color(0.5, 0.7, 1.0).scale(t))
 }
 
@@ -96,6 +95,12 @@ func main() {
 
 	fmt.Printf("DEBUG %f %f %f\n", lowerLeftCorner.x, lowerLeftCorner.y, lowerLeftCorner.z)
 
+	var world HittableList
+	var sphere1 = sphere(point3(0, 0, -1), 0.5)
+	var sphere2 = sphere(point3(0, -100.5, -1), 100)
+	world.add(&sphere1)
+	world.add(&sphere2)
+
 	for j := imageHeight - 1; j >= 0; j-- {
 		for i := 0; i < imageWidth; i++ {
 			// 0 <= u,v <= 1
@@ -106,7 +111,7 @@ func main() {
 			var dir Vector = ((lowerLeftCorner.plus(horizontal.scale(u))).plus(vertical.scale(v))).minus(origin)
 			// vector from camera's eye to the viewport
 			var ray Ray = ray(origin, dir)
-			var pixelColor = rayColor(ray)
+			var pixelColor = rayColor(ray, &world)
 
 			writeColor(w, pixelColor)
 		}

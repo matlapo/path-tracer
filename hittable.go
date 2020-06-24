@@ -11,7 +11,7 @@ type HitRecord struct {
 // set the normal vector to the appropriate direction.
 // the normal always (by convention) points against the ray.
 // we therefore keep track of which side the ray is hitting.
-func (rec HitRecord) setFaceNormal(ray Ray, outwardNormal Vector) {
+func (rec *HitRecord) setFaceNormal(ray Ray, outwardNormal Vector) {
 	rec.frontFace = ray.direction.dot(outwardNormal) < 0
 	if rec.frontFace {
 		rec.normal = outwardNormal

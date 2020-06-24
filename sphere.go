@@ -11,7 +11,7 @@ func sphere(cen Point3, r float64) Sphere {
 	return Sphere{center: cen, radius: r}
 }
 
-func (sphere Sphere) hit(ray Ray, tMin float64, tMax float64, rec HitRecord) bool {
+func (sphere *Sphere) hit(ray Ray, tMin float64, tMax float64, rec HitRecord) bool {
 	var oc Vector = ray.origin.minus(sphere.center)
 	var a = ray.direction.lengthSquared()
 	var halfB = oc.dot(ray.direction)
