@@ -16,3 +16,9 @@ note: the normal vector is independent of the ray's direction!
 if the ray always point out, then when we color, we can take the dot product of the ray and normal vector to tell whether which side we are on. Otherwise, we need to keep track of that information.
 
 It comes down to determining this either at coloring time (dot product) or geometry time (extra state).
+
+antialiasing: blending the color arounds edges. Normal cameras get this for free.
+
+Question: what determines if one pixel is the background color, but the one besides is the objects color?
+
+There are multiples rays that go through the same pixel.
