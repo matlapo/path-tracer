@@ -24,3 +24,4 @@ func (rec *HitRecord) setFaceNormal(ray Ray, outwardNormal Vector) {
 type hittable interface {
 	hit(ray Ray, tMin float64, tMax float64, rec *HitRecord) bool
 }
+
