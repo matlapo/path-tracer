@@ -88,15 +88,18 @@ func main() {
 
 	var cam Camera = camera()
 
+	// for every pixel in the image.
 	for j := imageHeight - 1; j >= 0; j-- {
 		for i := 0; i < imageWidth; i++ {
 			var pixelColor Color = color(0, 0, 0)
-			// 0 <= u,v <= 1
-			// lower_left_corner + u*horizontal + v*vertical - origin
-			// u,v = fraction of viewport => u*horizontal = current point on viewport
 			for s := 0; s < samplesPerPixel; s++ {
+				// for the given pixel (i,j), send samplesPerPixel rays into it.
+				// If there was no randomness, the ray would always hit the same
+				// color in the scene, so we would have no antialiasing.
 				var u = (float64(i) + rand.Float64()) / float64(imageWidth-1)
 				var v = (float64(j) + rand.Float64()) / float64(imageHeight-1)
+				// u,v represents ratios of the image, the same ratio can be applied
+				// to the viewport.
 				var r Ray = cam.getRay(u, v)
 				var rayColor = rayColor(r, &world)
 				pixelColor = pixelColor.plus(rayColor)
