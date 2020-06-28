@@ -34,13 +34,20 @@ func check(e error) {
 
 // returns the color of the background
 // blendValue = (1 - t)*startValue + t*endValue (0 <= t <= 1)
-func rayColor(ray Ray, world hittable) Color {
+func rayColor(r Ray, world hittable, depth int) Color {
 	var hitRecord HitRecord
-	if world.hit(ray, 0, infinity, &hitRecord) {
-		return (hitRecord.normal.plus(color(1, 1, 1))).scale(0.5)
+
+	if depth <= 0 {
+		// ray has exceeded max number of bounces, no more light gathered.
+		return color(0, 0, 0)
+	}
+
+	if world.hit(r, 0, infinity, &hitRecord) {
+		var target = hitRecord.p.plus(hitRecord.normal).plus(randomInUnitSphere())
+		return rayColor(ray(hitRecord.p, target.minus(hitRecord.p)), world, depth-1).scale(0.5)
 	}
 	// else, ray hits the background.
-	var unitDirection Vector = ray.direction.unit()
+	var unitDirection Vector = r.direction.unit()
 	// by converting ray.direction to a unit vector, we can have
 	// a blend based on the value of y (which we know is now -1 < y < 1)
 	// and the 1/2 factor keeps 0 <= t <= 1 required for the lerp.
@@ -68,6 +75,7 @@ func main() {
 	const imageWidth = 384
 	const imageHeight = int(imageWidth / aspectRatio)
 	const samplesPerPixel = 100
+	const maxDepth = 50
 
 	f, err := os.Create("./image.ppm")
 	check(err)
@@ -101,7 +109,7 @@ func main() {
 				// u,v represents ratios of the image, the same ratio can be applied
 				// to the viewport.
 				var r Ray = cam.getRay(u, v)
-				var rayColor = rayColor(r, &world)
+				var rayColor = rayColor(r, &world, maxDepth)
 				pixelColor = pixelColor.plus(rayColor)
 			}
 			writeColor(w, pixelColor, samplesPerPixel)

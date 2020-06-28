@@ -2,6 +2,7 @@ package main
 
 import (
 	"math"
+	"math/rand"
 )
 
 // Vector to represent point or color
@@ -73,4 +74,28 @@ func (u Vector) cross(v Vector) Vector {
 
 func (u Vector) unit() Vector {
 	return u.divide(u.length())
+}
+
+func random() Vector {
+	return vec3(rand.Float64(), rand.Float64(), rand.Float64())
+}
+
+func randomInRange(min float64, max float64) Vector {
+	x := min + rand.Float64()*(max-min)
+	y := min + rand.Float64()*(max-min)
+	z := min + rand.Float64()*(max-min)
+	return vec3(x, y, z)
+}
+
+// pick a random point inside a sphere.
+// works by picking a random point in a unit
+// cube and reject until within a sphere.
+func randomInUnitSphere() Vector {
+	for {
+		var point = randomInRange(-1, 1)
+		if point.lengthSquared() >= 1 {
+			continue
+		}
+		return point
+	}
 }
