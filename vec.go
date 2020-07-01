@@ -107,3 +107,9 @@ func randomUnitVector() Vector {
 	var r = math.Sqrt(1 - z*z)
 	return vec3(r*math.Cos(a), r*math.Sin(a), z)
 }
+
+// Reflection for metals
+func reflect(v Vector, n Vector) Vector {
+	var dot = v.dot(n)
+	return v.minus(n.scale(2 * dot))
+}

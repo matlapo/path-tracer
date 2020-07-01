@@ -3,12 +3,13 @@ package main
 import "math"
 
 type Sphere struct {
-	center Point3
-	radius float64
+	center   Point3
+	radius   float64
+	material material
 }
 
-func sphere(cen Point3, r float64) Sphere {
-	return Sphere{center: cen, radius: r}
+func sphere(cen Point3, r float64, material material) Sphere {
+	return Sphere{center: cen, radius: r, material: material}
 }
 
 func (sphere *Sphere) hit(ray Ray, tMin float64, tMax float64, rec *HitRecord) bool {
@@ -26,6 +27,7 @@ func (sphere *Sphere) hit(ray Ray, tMin float64, tMax float64, rec *HitRecord) b
 			rec.p = ray.at(rec.t)
 			var outwardNormal = (rec.p.minus(sphere.center)).divide(sphere.radius)
 			rec.setFaceNormal(ray, outwardNormal)
+			rec.material = sphere.material
 			return true
 		}
 		temp = (-halfB + root) / a
@@ -34,6 +36,7 @@ func (sphere *Sphere) hit(ray Ray, tMin float64, tMax float64, rec *HitRecord) b
 			rec.p = ray.at(rec.t)
 			var outwardNormal = (rec.p.minus(sphere.center)).divide(sphere.radius)
 			rec.setFaceNormal(ray, outwardNormal)
+			rec.material = sphere.material
 			return true
 		}
 	}

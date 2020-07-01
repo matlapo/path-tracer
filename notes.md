@@ -33,3 +33,15 @@ point3 target = rec.p + rec.normal + random_in_unit_sphere();
 rec.p is a 3D point on the sphere. rec.normal is a vector representing the direction the normal, but it originates from (0,0,0). rec.p + rec.normal = a vector from (0,0,0) to where the normal points when positioned on the surface.Adding a random point within a unit sphere to this gives a random direction for the child ray.
 
 Lambertian: the less light that is reflected towards the normal (and thus less towards the camera) the darker the object will be.
+
+TODO: with more complex scenes, try the 3 different diffuse schemes to see their differences.
+
+Metal
+-----
+
+A material interface must define two things:
+
+- Produce a scattered ray (or say it absorbed the incident ray).
+- If scattered, say how much the ray should be attenuated.
+
+

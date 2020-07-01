@@ -43,10 +43,12 @@ func rayColor(r Ray, world hittable, depth int) Color {
 	}
 
 	if world.hit(r, 0.001, infinity, &hitRecord) {
-		// compute a random point within the unit sphere tangent to the surface.
-		var target = hitRecord.p.plus(hitRecord.normal).plus(randomUnitVector())
-		// target - parent ray impact point = new direction of child ray.
-		return rayColor(ray(hitRecord.p, target.minus(hitRecord.p)), world, depth-1).scale(0.5)
+		var scattered Ray
+		var attenuation Color
+		if hitRecord.material.scatter(&r, &hitRecord, &attenuation, &scattered) {
+			return rayColor(scattered, world, depth-1).times(attenuation)
+		}
+		return color(0, 0, 0)
 	}
 	// else, ray hits the background.
 	var unitDirection Vector = r.direction.unit()
@@ -91,10 +93,18 @@ func main() {
 	fmt.Printf("wrote header: %d bytes\n", n4)
 
 	var world HittableList
-	var sphere1 = sphere(point3(0, 0, -1), 0.5)
-	var sphere2 = sphere(point3(0, -100.5, -1), 100)
+	var lambertian1 = lambertian(color(0.7, 0.3, 0.3))
+	var lambertian2 = lambertian(color(0.8, 0.8, 0.0))
+	var sphere1 = sphere(point3(0, 0, -1), 0.5, &lambertian1)
+	var sphere2 = sphere(point3(0, -100.5, -1), 100, &lambertian2)
+	var metal1 = metal(color(0.8, 0.6, 0.2))
+	var metal2 = metal(color(0.8, 0.8, 0.8))
+	var sphere3 = sphere(point3(1, 0, -1), 0.5, &metal1)
+	var sphere4 = sphere(point3(-1, 0, -1), 0.5, &metal2)
 	world.add(&sphere1)
 	world.add(&sphere2)
+	world.add(&sphere3)
+	world.add(&sphere4)
 
 	var cam Camera = camera()
 

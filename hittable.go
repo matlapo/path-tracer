@@ -10,6 +10,7 @@ type HitRecord struct {
 	// always points outward. We thus keep track of which side (front or back)
 	// the ray is hitting the object.
 	frontFace bool
+	material  material
 }
 
 // set the normal vector to the appropriate direction.
