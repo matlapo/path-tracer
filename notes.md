@@ -22,3 +22,14 @@ antialiasing: blending the color arounds edges. Normal cameras get this for free
 Question: what determines if one pixel is the background color, but the one besides is the objects color?
 
 There are multiples rays that go through the same pixel.
+
+The image may be discrete (pixels) but the scene is continuous!
+
+Diffuse materials
+-----------------
+
+point3 target = rec.p + rec.normal + random_in_unit_sphere();
+
+rec.p is a 3D point on the sphere. rec.normal is a vector representing the direction the normal, but it originates from (0,0,0). rec.p + rec.normal = a vector from (0,0,0) to where the normal points when positioned on the surface.Adding a random point within a unit sphere to this gives a random direction for the child ray.
+
+Lambertian: the less light that is reflected towards the normal (and thus less towards the camera) the darker the object will be.

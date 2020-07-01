@@ -80,10 +80,10 @@ func random() Vector {
 	return vec3(rand.Float64(), rand.Float64(), rand.Float64())
 }
 
-func randomInRange(min float64, max float64) Vector {
-	x := min + rand.Float64()*(max-min)
-	y := min + rand.Float64()*(max-min)
-	z := min + rand.Float64()*(max-min)
+func randomVecInRange(min float64, max float64) Vector {
+	x := randomFloatInRange(min, max)
+	y := randomFloatInRange(min, max)
+	z := randomFloatInRange(min, max)
 	return vec3(x, y, z)
 }
 
@@ -92,10 +92,18 @@ func randomInRange(min float64, max float64) Vector {
 // cube and reject until within a sphere.
 func randomInUnitSphere() Vector {
 	for {
-		var point = randomInRange(-1, 1)
+		var point = randomVecInRange(-1, 1)
 		if point.lengthSquared() >= 1 {
 			continue
 		}
 		return point
 	}
+}
+
+// True Lambertian reflection
+func randomUnitVector() Vector {
+	var a = randomFloatInRange(0, 2*math.Pi)
+	var z = randomFloatInRange(-1, 1)
+	var r = math.Sqrt(1 - z*z)
+	return vec3(r*math.Cos(a), r*math.Sin(a), z)
 }

@@ -44,7 +44,7 @@ func rayColor(r Ray, world hittable, depth int) Color {
 
 	if world.hit(r, 0.001, infinity, &hitRecord) {
 		// compute a random point within the unit sphere tangent to the surface.
-		var target = hitRecord.p.plus(hitRecord.normal).plus(randomInUnitSphere())
+		var target = hitRecord.p.plus(hitRecord.normal).plus(randomUnitVector())
 		// target - parent ray impact point = new direction of child ray.
 		return rayColor(ray(hitRecord.p, target.minus(hitRecord.p)), world, depth-1).scale(0.5)
 	}

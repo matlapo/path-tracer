@@ -2,6 +2,7 @@ package main
 
 import (
 	"math"
+	"math/rand"
 )
 
 var infinity float64 = math.Inf(1)
@@ -20,4 +21,8 @@ func clamp(x float64, min float64, max float64) float64 {
 		return max
 	}
 	return x
+}
+
+func randomFloatInRange(min float64, max float64) float64 {
+	return min + rand.Float64()*(max-min)
 }
