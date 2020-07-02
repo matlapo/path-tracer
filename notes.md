@@ -44,4 +44,9 @@ A material interface must define two things:
 - Produce a scattered ray (or say it absorbed the incident ray).
 - If scattered, say how much the ray should be attenuated.
 
+metals reflects light rays with the same angle relative to the normal (but we add a bit of randomness).
 
+Dielectris
+----------
+
+When light hits these materials, part of the ray is reflected and the rest is refracted.

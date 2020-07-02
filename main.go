@@ -93,14 +93,14 @@ func main() {
 	fmt.Printf("wrote header: %d bytes\n", n4)
 
 	var world HittableList
-	var lambertian1 = lambertian(color(0.7, 0.3, 0.3))
+	var dielectric1 = dielectric(1.4)
 	var lambertian2 = lambertian(color(0.8, 0.8, 0.0))
-	var sphere1 = sphere(point3(0, 0, -1), 0.5, &lambertian1)
+	var sphere1 = sphere(point3(0, 0, -1), 0.5, &dielectric1)
 	var sphere2 = sphere(point3(0, -100.5, -1), 100, &lambertian2)
 	var metal1 = metal(color(0.8, 0.6, 0.2), 0.3)
-	var metal2 = metal(color(0.8, 0.8, 0.8), 0.1)
+	var dielectric2 = dielectric(1.4)
 	var sphere3 = sphere(point3(1, 0, -1), 0.5, &metal1)
-	var sphere4 = sphere(point3(-1, 0, -1), 0.5, &metal2)
+	var sphere4 = sphere(point3(-1, 0, -1), 0.5, &dielectric2)
 	world.add(&sphere1)
 	world.add(&sphere2)
 	world.add(&sphere3)

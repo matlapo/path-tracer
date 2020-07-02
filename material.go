@@ -37,3 +37,25 @@ func (m *Metal) scatter(rayIn *Ray, rec *HitRecord, attenuation *Color, rayOut *
 	*attenuation = m.albedo
 	return (rayOut.direction.dot(rec.normal) > 0)
 }
+
+type Dielectric struct {
+	refIdx float64
+}
+
+func dielectric(ri float64) Dielectric {
+	return Dielectric{refIdx: ri}
+}
+
+func (d *Dielectric) scatter(rayIn *Ray, rec *HitRecord, attenuation *Color, rayOut *Ray) bool {
+	*attenuation = color(1.0, 1.0, 1.0)
+	var EtaiOverEtat float64
+	if rec.frontFace {
+		EtaiOverEtat = 1.0 / d.refIdx
+	} else {
+		EtaiOverEtat = d.refIdx
+	}
+	var unitDirection = rayIn.direction.unit()
+	var refracted = refract(unitDirection, rec.normal, EtaiOverEtat)
+	*rayOut = ray(rec.p, refracted)
+	return true
+}

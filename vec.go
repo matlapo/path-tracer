@@ -113,3 +113,11 @@ func reflect(v Vector, n Vector) Vector {
 	var dot = v.dot(n)
 	return v.minus(n.scale(2 * dot))
 }
+
+// Refraction for dielectrics
+func refract(v Vector, n Vector, EtaiOverEtat float64) Vector {
+	var cosTheta = (v.inv()).dot(n)
+	var rOutParallel = (v.plus(n.scale(cosTheta))).scale(EtaiOverEtat)
+	var rOutPerp = n.scale(-math.Sqrt(1.0 - rOutParallel.lengthSquared()))
+	return rOutParallel.plus(rOutPerp)
+}
